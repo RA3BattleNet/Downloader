@@ -5,9 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ra3.BattleNet.Downloader"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="{Binding Caption}" Height="270" Width="480" SizeToContent="Height"
         Loaded="Window_Loaded">
-    <Grid>
-        
-    </Grid>
+    <Window.DataContext>
+        <local:ViewModel />
+    </Window.DataContext>
+    <StackPanel Margin="16">
+        <StackPanel.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="0,0,0,8"/>
+            </Style>
+        </StackPanel.Resources>
+        <TextBlock TextWrapping="Wrap" Text="{Binding DownloadText}" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="0.25*" />
+                <ColumnDefinition Width="0.25*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding DownloadedSize}" HorizontalAlignment="Left" />
+            <TextBlock Grid.Column="1" Text="{Binding Progress}" HorizontalAlignment="Right" />
+            <TextBlock Grid.Column="2" Text="{Binding DownloadSpeed}" HorizontalAlignment="Right" />
+        </Grid>
+        <TextBlock TextWrapping="Wrap" Text="{Binding Description}" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type RadioButton}">
+                    <Setter Property="Margin" Value="8,0,0,0"/>
+                </Style>
+            </StackPanel.Resources>
+            <RadioButton x:Name="ChineseCheckbox" Content="中文" Checked="ChineseCheckbox_Checked" />
+            <RadioButton x:Name="EnglishCheckbox" Content="English" Checked="EnglishCheckbox_Checked" />
+        </StackPanel>
+    </StackPanel>
 </Window>

@@ -17,21 +17,26 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ChangeLanguage(chinese: true);
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        return;
+        var assembly = Assembly.GetEntryAssembly();
         // Replace 'yourMagnetLink' with the actual magnetic link.
-        string magnetLink = "yourMagnetLink";
-        string downloadFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        string downloadFolder = Path.GetDirectoryName(assembly.Location);
 
         // Create a Torrent object from the magnetic link.
-        MagnetLink magnet = MagnetLink.Parse(magnetLink);
+        Torrent torrent = Torrent.Load(assembly.GetManifestResourceStream("Client.torrent"));
 
         var engine = new ClientEngine();
-        engine.CriticalException += (o, e) => Failure(e.Exception.Message);
+        engine.CriticalException += (o, e) => 
+        {
+            App.NoReturnFatalErrorMessageBox(e.Exception.ToString());
+        };
 
-        var torrentManager = await engine.AddAsync(magnet, downloadFolder);
+        var torrentManager = await engine.AddAsync(torrent, downloadFolder);
         await engine.StartAllAsync();
 
         var dispatcherTimer = new DispatcherTimer();
@@ -53,9 +58,16 @@ public partial class MainWindow : Window
         dispatcherTimer.Start();
     }
 
-    private void Failure(string reason)
+    private void ChineseCheckbox_Checked(object sender, RoutedEventArgs e) => ChangeLanguage(chinese: true);
+    private void EnglishCheckbox_Checked(object sender, RoutedEventArgs e) => ChangeLanguage(chinese: false);
+
+    private void ChangeLanguage(bool chinese)
     {
-        MessageBox.Show(reason, "RA3BattleNet Download Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        Application.Current.Shutdown();
+        var viewModel = new ViewModel(chinese ? "zh" : "en");
+        App.ErrorCaption = viewModel.ErrorCaption;
+        DataContext = viewModel;
+
+        ChineseCheckbox.IsChecked = chinese;
+        EnglishCheckbox.IsChecked = !chinese;
     }
 }
