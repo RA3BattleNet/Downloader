@@ -10,7 +10,7 @@ namespace Ra3.BattleNet.Downloader;
 /// 
 public partial class App : Application
 {
-    public static string ErrorCaption { get; set; }
+    public static string? ErrorCaption { get; set; }
 
     static App()
     {
