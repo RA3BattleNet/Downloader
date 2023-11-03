@@ -6,10 +6,15 @@
     <UseWPF>true</UseWPF>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>Ra3.BattleNet.Icon.64px.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Client.torrent" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Ra3.BattleNet.Icon.64px.ico" />
   </ItemGroup>
 
   <ItemGroup>
