@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ra3.BattleNet.Downloader;
 
@@ -14,82 +15,101 @@ public class ViewModel : INotifyPropertyChanged
         ["zh.ErrorCaption"] = "红警3战网下载错误",
         ["en.DownloadText"] = "Downloading {0} to {1}",
         ["zh.DownloadText"] = "正在下载 {0} 到 {1}",
-        ["en.DownloadedSize"] = "已下载 {0} / {1}",
-        ["zh.DownloadedSize"] = "已下载 {0} / {1}",
+        ["en.DownloadedSize"] = "{0} / {1}",
+        ["zh.DownloadedSize"] = "{0} / {1}",
         ["en.Progress"] = "{0:P2}",
         ["zh.Progress"] = "{0:P2}",
         ["en.DownloadSpeed"] = "{0}",
         ["zh.DownloadSpeed"] = "{0}",
         ["en.Description"] = "After the download is complete, the installer will be executed automatically. You can visit https://ra3battle.net or join QQ group 604807102 for more information about RA3BattleNet.",
-        ["zh.Description"] = "下载完毕之后安装程序将自动执行。您可以访问 https://ra3battle.net 或者加入 QQ 群 604807102 以了解关于红警3战网的更多信息。"
+        ["zh.Description"] = "下载完毕之后安装程序将自动执行。您可以访问 https://ra3battle.net 或者加入 QQ 群 604807102 以了解关于红警3战网的更多信息。",
+        ["en.CannotRunInstaller"] = "Cannot run the installer.",
+        ["zh.CannotRunInstaller"] = "无法执行安装程序。"
     };
-    private readonly string _id;
+    private readonly HashSet<string> _properties = new();
+    private string _id;
 
     public ViewModel() : this("zh") { }
 
     public ViewModel(string id)
     {
-        _id = id switch { "en" => "en", _ => "zh" };
+        ChangeLanguage(id);
         SetDownloadText("?", "?");
         SetDownloadedSize(0, 0);
         SetProgress(0);
         SetDownloadSpeed(0);
     }
 
-    public string Caption => GetLocalized(nameof(Caption));
-    public string ErrorCaption => GetLocalized(nameof(ErrorCaption));
-
-    public string DownloadText => Get(nameof(DownloadText));
-    public string SetDownloadText(string fileName, string downloadFolder)
+    [MemberNotNull(nameof(_id))]
+    public void ChangeLanguage(string id)
     {
-        var text = string.Format(GetLocalized(nameof(DownloadText)), fileName, downloadFolder);
-        Set(nameof(DownloadText), text);
-        return text;
+        _id = id switch { "en" => "en", _ => "zh" };
+        foreach (var key in _properties)
+        {
+            PropertyChanged?.Invoke(this, new(key));
+        }
     }
 
-    public string DownloadedSize => Get(nameof(DownloadedSize));
-    public string SetDownloadedSize(long downloadedSize, long totalSize)
+    public string Caption => Get(nameof(Caption));
+    public string ErrorCaption => Get(nameof(ErrorCaption));
+    public string CannotRunInstaller => Get(nameof(CannotRunInstaller));
+
+    public string DownloadText => string.Format(Get(nameof(DownloadText)), _fileName, _downloadFolder);
+    private string _fileName = "?";
+    private string _downloadFolder = "?";
+    public void SetDownloadText(string fileName, string downloadFolder)
     {
-        var text = string.Format(GetLocalized(nameof(DownloadedSize)), FormatBytes(downloadedSize), FormatBytes(totalSize));
-        Set(nameof(DownloadedSize), text);
-        return text;
+        _fileName = fileName;
+        _downloadFolder = downloadFolder;
+        OnSet(nameof(DownloadText));
     }
 
-    public string Progress => Get(nameof(Progress));
-    public string SetProgress(double progress)
+    public string DownloadedSize => string.Format(Get(nameof(DownloadedSize)), FormatBytes(_downloadedSize), FormatBytes(_totalSize));
+    private long _downloadedSize;
+    private long _totalSize;
+    public void SetDownloadedSize(long downloadedSize, long totalSize)
     {
-        var text = string.Format(GetLocalized(nameof(Progress)), progress);
-        Set(nameof(Progress), text);
-        return text;
+        _downloadedSize = downloadedSize;
+        _totalSize = totalSize;
+        OnSet(nameof(DownloadedSize));
     }
 
-    public string DownloadSpeed => Get(nameof(DownloadSpeed));
-    public string SetDownloadSpeed(double bytePerSecond)
+    public string Progress => string.Format(Get(nameof(Progress)), _progress);
+    private double _progress;
+    public void SetProgress(double progress)
     {
-        var speed = FormatBytes(bytePerSecond) + "/s";
-        var text = string.Format(GetLocalized(nameof(DownloadSpeed)), speed);
-        Set(nameof(DownloadSpeed), text);
-        return text;
+        _progress = progress;
+        OnSet(nameof(Progress));
     }
 
-    public string Description => GetLocalized(nameof(Description));
-
-
-    private string Get(string key) => _values.TryGetValue(key, out var value) ? value : string.Empty;
-    private string GetLocalized(string key) => Get($"{_id}.{key}");
-    private void Set(string key, string value)
+    public string DownloadSpeed => string.Format(Get(nameof(DownloadSpeed)), FormatBytes(_bytePerSecond));
+    private double _bytePerSecond;
+    public void SetDownloadSpeed(double bytePerSecond)
     {
-        _values[key] = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
+        _bytePerSecond = bytePerSecond;
+        OnSet(nameof(DownloadSpeed));
+    }
+
+    public string Description => Get(nameof(Description));
+
+    private string Get(string property)
+    {
+        _properties.Add(property);
+        return _values.TryGetValue($"{_id}.{property}", out var value) ? value : string.Empty;
+    }
+    private void OnSet(string property)
+    {
+        _properties.Add(property);
+        PropertyChanged?.Invoke(this, new(property));
     }
 
     private static string FormatBytes(double bytes)
     {
         return bytes switch
         {
-            var x when x > 1024 * 1024 => $"{x / 1024 / 1024:F2} MB",
-            var x when x > 1024 => $"{x / 1024:F2} KB",
-            _ => $"{bytes:F2} B",
+            var x when x > 1024 * 1024 => $"{x / 1024 / 1024:F2}MB",
+            var x when x > 1024 => $"{x / 1024:F2}KB",
+            _ => $"{bytes:F2}B",
         };
     }
 }

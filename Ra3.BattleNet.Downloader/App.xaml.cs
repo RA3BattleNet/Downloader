@@ -11,12 +11,19 @@ namespace Ra3.BattleNet.Downloader;
 public partial class App : Application
 {
     public static string? ErrorCaption { get; set; }
+    public static string? ErrorDetailsFormat { get; set; }
 
     static App()
     {
         AppDomain.CurrentDomain.UnhandledException += (o, e) =>
         {
-            NoReturnFatalErrorMessageBox(e.ExceptionObject.ToString());
+            var reason = "Unknown Error";
+            try
+            {
+                reason = e.ExceptionObject?.ToString() ?? "Unknown Error";
+            }
+            catch { }
+            NoReturnFatalErrorMessageBox(reason);
         };
     }
 

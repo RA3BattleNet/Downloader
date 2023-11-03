@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Client.torrent" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Client.torrent" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MonoTorrent" Version="2.0.7" />
   </ItemGroup>
 

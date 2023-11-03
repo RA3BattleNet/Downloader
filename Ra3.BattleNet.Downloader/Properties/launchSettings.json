@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Ra3.BattleNet.Downloader": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
