@@ -9,12 +9,12 @@ public class ViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     private readonly Dictionary<string, string> _values = new()
     {
-        ["en.Caption"] = "RA3BattleNet Installer",
-        ["zh.Caption"] = "红警3战网客户端 自动安装程序",
+        ["en.Caption"] = "RA3BattleNet Downloader",
+        ["zh.Caption"] = "红警3战网客户端 下载程序",
         ["en.ErrorCaption"] = "RA3BattleNet Download Error",
         ["zh.ErrorCaption"] = "红警3战网下载错误",
-        ["en.DownloadText"] = "Downloading {0} to {1}",
-        ["zh.DownloadText"] = "正在下载 {0} 到 {1}",
+        ["en.DownloadText"] = "Downloading {0}",
+        ["zh.DownloadText"] = "正在下载 {0}",
         ["en.DownloadedSize"] = "{0} / {1}",
         ["zh.DownloadedSize"] = "{0} / {1}",
         ["en.Progress"] = "{0:P2} Completed",
@@ -34,7 +34,7 @@ public class ViewModel : INotifyPropertyChanged
     public ViewModel(string id)
     {
         ChangeLanguage(id);
-        SetDownloadText("?", "?");
+        SetDownloadText("METADATA");
         SetDownloadedSize(0, 0);
         SetProgress(0);
         SetDownloadSpeed(0);
@@ -54,13 +54,11 @@ public class ViewModel : INotifyPropertyChanged
     public string ErrorCaption => Get(nameof(ErrorCaption));
     public string CannotRunInstaller => Get(nameof(CannotRunInstaller));
 
-    public string DownloadText => string.Format(Get(nameof(DownloadText)), _fileName, _downloadFolder);
+    public string DownloadText => string.Format(Get(nameof(DownloadText)), _fileName);
     private string _fileName = "?";
-    private string _downloadFolder = "?";
-    public void SetDownloadText(string fileName, string downloadFolder)
+    public void SetDownloadText(string fileName)
     {
         _fileName = fileName;
-        _downloadFolder = downloadFolder;
         OnSet(nameof(DownloadText));
     }
 
@@ -75,11 +73,14 @@ public class ViewModel : INotifyPropertyChanged
     }
 
     public string Progress => string.Format(Get(nameof(Progress)), _progress);
+    public double ProgressBarValue => _progress * 100;
+
     private double _progress;
     public void SetProgress(double progress)
     {
         _progress = progress;
         OnSet(nameof(Progress));
+        OnSet(nameof(ProgressBarValue));
     }
 
     public string DownloadSpeed => string.Format(Get(nameof(DownloadSpeed)), FormatBytes(_bytePerSecond));
@@ -113,4 +114,3 @@ public class ViewModel : INotifyPropertyChanged
         };
     }
 }
-
