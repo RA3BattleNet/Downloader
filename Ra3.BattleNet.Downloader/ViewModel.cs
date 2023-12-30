@@ -75,6 +75,7 @@ public class ViewModel : INotifyPropertyChanged
 
     public string Progress => string.Format(Get(nameof(Progress)), _progress);
     public double ProgressBarValue => _progress * 100;
+    public double ProgressTaskbarValue => _progress;
 
     private double _progress;
     public void SetProgress(double progress)
@@ -82,6 +83,7 @@ public class ViewModel : INotifyPropertyChanged
         _progress = progress;
         OnSet(nameof(Progress));
         OnSet(nameof(ProgressBarValue));
+        OnSet(nameof(ProgressTaskbarValue));
     }
 
     public string DownloadSpeed => string.Format(Get(nameof(DownloadSpeed)), FormatBytes(_bytePerSecond));

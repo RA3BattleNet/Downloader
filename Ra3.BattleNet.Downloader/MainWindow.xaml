@@ -17,6 +17,9 @@
     <Window.DataContext>
         <local:ViewModel />
     </Window.DataContext>
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding ProgressTaskbarValue, Mode=OneWay}" />
+    </Window.TaskbarItemInfo>
     <StackPanel Margin="24,12,24,24">
         <TextBlock Text="{Binding DownloadText}" TextWrapping="Wrap" />
         <Grid Margin="0,2,0,10">
