@@ -14,8 +14,9 @@ public static class Download
 {
     public static async Task BitTorrentDownload(ViewModel viewModel)
     {
-        // Set download folder to RA3BattleNet Temp.
-        string downloadFolder = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "RA3BattleNet", "temp");
+        // Set download folder to Current file path.
+        //string downloadFolder = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "RA3BattleNet", "temp");
+        string downloadFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
         if (!Directory.Exists(downloadFolder))
         {
