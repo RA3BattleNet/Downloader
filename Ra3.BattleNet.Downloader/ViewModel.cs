@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
@@ -13,8 +14,8 @@ public class ViewModel : INotifyPropertyChanged
         ["zh.Caption"] = "红警3战网客户端 下载程序",
         ["en.ErrorCaption"] = "RA3BattleNet Download Error",
         ["zh.ErrorCaption"] = "红警3战网下载错误",
-        ["en.DownloadText"] = "Downloading {0}",
-        ["zh.DownloadText"] = "正在下载 {0}",
+        ["en.DownloadText"] = "Downloading {0} to \"Downloads\" folder",
+        ["zh.DownloadText"] = "正在下载 {0} 到 \"下载\"文件夹",
         ["en.DownloadedSize"] = "{0} / {1}",
         ["zh.DownloadedSize"] = "{0} / {1}",
         ["en.Progress"] = "{0:P2} Completed",

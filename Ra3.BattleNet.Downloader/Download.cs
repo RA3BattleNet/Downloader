@@ -1,10 +1,12 @@
 ﻿using MonoTorrent;
 using MonoTorrent.Client;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -14,13 +16,22 @@ public static class Download
 {
     public static async Task BitTorrentDownload(ViewModel viewModel)
     {
-        // Set download folder to Current file path.
-        //string downloadFolder = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "RA3BattleNet", "temp");
-        string downloadFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        // Get RA3BattleNet temp folder.
+        string tempFolder = Path.Combine(Environment.GetEnvironmentVariable("appdata"), "RA3BattleNet", "temp");
+        string cacheFolder = Path.Combine(tempFolder, "downloader");
 
-        if (!Directory.Exists(downloadFolder))
+        // Get User's Download folder.
+        string downloadFolder = System.Convert.ToString(Microsoft.Win32.Registry.GetValue(
+             @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders",
+             "{374DE290-123F-4565-9164-39C4925E467B}",
+             tempFolder));
+
+        foreach (var path in new List<string> { tempFolder, cacheFolder, downloadFolder})
         {
-            Directory.CreateDirectory(downloadFolder);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
 
         var torrent = await Task.Run(() => Torrent.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Download).Namespace + ".Client.torrent")));
@@ -30,6 +41,7 @@ public static class Download
             ListenPort = -1,
             DhtPort = -1,
             AllowPortForwarding = false,
+            CacheDirectory = cacheFolder,
         };
         var engine = new ClientEngine(settingsBuilder.ToSettings());
 
@@ -63,6 +75,7 @@ public static class Download
         var downloadedFile = await taskSource.Task;
         try
         {
+            Thread.Sleep(1000);
             Process.Start(new ProcessStartInfo
             {
                 FileName = Path.Combine(downloadFolder, torrentManager.Files[0].Path),
