@@ -9,7 +9,10 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ApplicationIcon>Ra3.BattleNet.Icon.64px.ico</ApplicationIcon>
-    <AssemblyName>RA3BattleNet_Downloader_$(AssemblyVersion)</AssemblyName>
+	<Authors>RA3BattleNet Developers</Authors>
+	<Company>RA3BattleNet Developers</Company>
+	<Copyright>Copyright © 2024 RA3BattleNet Developers</Copyright>
+    <AssemblyName>Ra3.BattleNet.Downloader</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
