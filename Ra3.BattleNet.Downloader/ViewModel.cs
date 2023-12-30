@@ -9,19 +9,19 @@ public class ViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
     private readonly Dictionary<string, string> _values = new()
     {
-        ["en.Caption"] = "RA3BattleNet Downloader",
-        ["zh.Caption"] = "红警3战网客户端下载程序",
+        ["en.Caption"] = "RA3BattleNet Installer",
+        ["zh.Caption"] = "红警3战网客户端 自动安装程序",
         ["en.ErrorCaption"] = "RA3BattleNet Download Error",
         ["zh.ErrorCaption"] = "红警3战网下载错误",
         ["en.DownloadText"] = "Downloading {0} to {1}",
         ["zh.DownloadText"] = "正在下载 {0} 到 {1}",
         ["en.DownloadedSize"] = "{0} / {1}",
         ["zh.DownloadedSize"] = "{0} / {1}",
-        ["en.Progress"] = "{0:P2}",
-        ["zh.Progress"] = "{0:P2}",
-        ["en.DownloadSpeed"] = "{0}",
-        ["zh.DownloadSpeed"] = "{0}",
-        ["en.Description"] = "After the download is complete, the installer will be executed automatically. You can visit https://ra3battle.net or join QQ group 604807102 for more information about RA3BattleNet.",
+        ["en.Progress"] = "{0:P2} Completed",
+        ["zh.Progress"] = "已完成 {0:P2}",
+        ["en.DownloadSpeed"] = "{0}/s",
+        ["zh.DownloadSpeed"] = "{0}/s",
+        ["en.Description"] = "After the download is completed, the installer will be executed automatically. You can visit https://ra3battle.net for more information.",
         ["zh.Description"] = "下载完毕之后安装程序将自动执行。您可以访问 https://ra3battle.net 或者加入 QQ 群 604807102 以了解关于红警3战网的更多信息。",
         ["en.CannotRunInstaller"] = "Cannot run the installer.",
         ["zh.CannotRunInstaller"] = "无法执行安装程序。"
