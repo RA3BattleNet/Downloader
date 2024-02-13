@@ -14,8 +14,12 @@ public class ViewModel : INotifyPropertyChanged
         ["zh.Caption"] = "红警3战网客户端 下载程序",
         ["en.ErrorCaption"] = "RA3BattleNet Download Error",
         ["zh.ErrorCaption"] = "红警3战网下载错误",
-        ["en.DownloadText"] = "Downloading {0} to \"Downloads\" folder",
-        ["zh.DownloadText"] = "正在下载 {0} 到 \"下载\"文件夹",
+        ["en.DownloadTextPart1"] = "Downloading {0} to ",
+        ["zh.DownloadTextPart1"] = "正在下载 {0} 到 ",
+        ["en.DownloadFolderText"] = "Downloads",
+        ["zh.DownloadFolderText"] = "下载",
+        ["en.FolderText"] = " folder",
+        ["zh.FolderText"] = " 文件夹",
         ["en.DownloadedSize"] = "{0} / {1}",
         ["zh.DownloadedSize"] = "{0} / {1}",
         ["en.Progress"] = "{0:P2} Completed",
@@ -50,17 +54,18 @@ public class ViewModel : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new(key));
         }
     }
-
     public string Caption => Get(nameof(Caption));
     public string ErrorCaption => Get(nameof(ErrorCaption));
     public string CannotRunInstaller => Get(nameof(CannotRunInstaller));
+    public string DownloadTextPart1 => string.Format(Get(nameof(DownloadTextPart1)), _fileName);
+    public string DownloadFolderText => Get(nameof(DownloadFolderText));
+    public string FolderText => Get(nameof(FolderText));
 
-    public string DownloadText => string.Format(Get(nameof(DownloadText)), _fileName);
     private string _fileName = "?";
     public void SetDownloadText(string fileName)
     {
         _fileName = fileName;
-        OnSet(nameof(DownloadText));
+        OnSet(nameof(DownloadTextPart1));
     }
 
     public string DownloadedSize => string.Format(Get(nameof(DownloadedSize)), FormatBytes(_downloadedSize), FormatBytes(_totalSize));

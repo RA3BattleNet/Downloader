@@ -21,7 +21,13 @@
         <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding ProgressTaskbarValue, Mode=OneWay}" />
     </Window.TaskbarItemInfo>
     <StackPanel Margin="24,12,24,24">
-        <TextBlock Text="{Binding DownloadText}" TextWrapping="Wrap" />
+        <TextBlock Text="" TextWrapping="WrapWithOverflow">
+            <Run Text="{Binding DownloadTextPart1, Mode=OneWay}" />
+            <Hyperlink Click="Hyperlink_Click">
+              <Run Text="{Binding DownloadFolderText, Mode=OneWay}" />
+            </Hyperlink>
+            <Run Text="{Binding FolderText, Mode=OneWay}" />
+        </TextBlock>
         <Grid Margin="0,2,0,10">
             <TextBlock
                 HorizontalAlignment="Left"

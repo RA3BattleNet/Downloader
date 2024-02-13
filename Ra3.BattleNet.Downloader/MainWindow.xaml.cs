@@ -30,4 +30,9 @@ public partial class MainWindow : Window
         ChineseCheckbox.IsChecked = chinese;
         EnglishCheckbox.IsChecked = !chinese;
     }
+
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+        Download.OpenAndLocateFile(Download.DownloadPath);
+    }
 }
