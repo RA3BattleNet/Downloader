@@ -27,7 +27,7 @@ public class ViewModel : INotifyPropertyChanged
         ["en.DownloadSpeed"] = "{0}/s",
         ["zh.DownloadSpeed"] = "{0}/s",
         ["en.Description"] = "After the download is completed, the installer will be executed automatically. You can visit https://ra3battle.net for more information.",
-        ["zh.Description"] = "下载完毕之后安装程序将自动执行。您可以访问 https://ra3battle.net 或者加入 QQ 群 604807102 以了解关于红警3战网的更多信息。",
+        ["zh.Description"] = "下载完毕之后安装程序将自动执行。您可以访问 https://ra3battle.net 或者加入 QQ 群 818026401 以了解关于红警3战网的更多信息。",
         ["en.CannotRunInstaller"] = "Cannot run the installer.",
         ["zh.CannotRunInstaller"] = "无法执行安装程序。"
     };
