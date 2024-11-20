@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace Ra3.BattleNet.Downloader;
@@ -38,11 +40,13 @@ public static class Download
 
         var settingsBuilder = new EngineSettingsBuilder
         {
-            ListenPort = -1,
-            DhtPort = -1,
             AllowPortForwarding = false,
             CacheDirectory = cacheFolder,
+            DhtEndPoint = null
         };
+
+        settingsBuilder.ListenEndPoints.Add(IPAddress.Loopback.ToString(), new IPEndPoint(IPAddress.Loopback, 0));
+
         var engine = new ClientEngine(settingsBuilder.ToSettings());
 
         var taskSource = new TaskCompletionSource<string>();
@@ -59,10 +63,10 @@ public static class Download
             if (!torrentManager.Complete)
             {
                 var monitor = torrentManager.Monitor;
-                viewModel.SetDownloadedSize(monitor.DataBytesDownloaded, torrent.Size);
-                var progress = (double)monitor.DataBytesDownloaded / torrent.Size;
+                viewModel.SetDownloadedSize(monitor.DataBytesReceived, torrent.Size);
+                var progress = (double)monitor.DataBytesReceived / torrent.Size;
                 viewModel.SetProgress(progress);
-                viewModel.SetDownloadSpeed(monitor.DownloadSpeed);
+                viewModel.SetDownloadSpeed(monitor.DownloadRate);
                 return;
             }
 
