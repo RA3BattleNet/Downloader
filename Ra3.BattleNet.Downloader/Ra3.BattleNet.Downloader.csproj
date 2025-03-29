@@ -4,8 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net461</TargetFramework>
     <UseWPF>true</UseWPF>
-	<AssemblyVersion>1.5.1.0</AssemblyVersion>  
-	<FileVersion>1.5.1.0</FileVersion>
+	<AssemblyVersion>1.5.2.0</AssemblyVersion>  
+	<FileVersion>1.5.2.0</FileVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ApplicationIcon>Ra3.BattleNet.Icon.64px.ico</ApplicationIcon>
