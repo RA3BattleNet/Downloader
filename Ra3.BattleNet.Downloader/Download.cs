@@ -38,6 +38,7 @@ public static class Download
 
         var settingsBuilder = new EngineSettingsBuilder
         {
+            AllowLocalPeerDiscovery = false,
             AllowPortForwarding = false,
             CacheDirectory = cacheFolder,
             DhtEndPoint = null,
@@ -59,8 +60,9 @@ public static class Download
             if (!torrentManager.Complete)
             {
                 var monitor = torrentManager.Monitor;
-                viewModel.SetDownloadedSize(monitor.DataBytesReceived, torrent.Size);
-                var progress = (double)monitor.DataBytesReceived / torrent.Size;
+                var dataBytesReceived = monitor.DataBytesReceived;
+                viewModel.SetDownloadedSize(dataBytesReceived, torrent.Size);
+                var progress = (double)dataBytesReceived / torrent.Size;
                 viewModel.SetProgress(progress);
                 viewModel.SetDownloadSpeed(monitor.DownloadRate);
                 return;
