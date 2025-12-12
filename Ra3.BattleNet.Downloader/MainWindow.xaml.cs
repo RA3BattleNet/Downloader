@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Security;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Microsoft.Win32;
 
@@ -23,6 +25,15 @@ public partial class MainWindow : Window
         InitializeComponent();
         ApplySystemTheme();
         ChangeLanguage(chinese: true);
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        if (IsSystemInDarkMode())
+        {
+            TrySetDarkTitleBar();
+        }
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -56,11 +67,18 @@ public partial class MainWindow : Window
             return;
         }
 
-        Background = DarkBackgroundBrush;
-        Foreground = DarkForegroundBrush;
-        DownloadProgressBar.Background = DarkBackgroundBrush;
-        ChineseCheckbox.Foreground = DarkForegroundBrush;
-        EnglishCheckbox.Foreground = DarkForegroundBrush;
+        try
+        {
+            Background = DarkBackgroundBrush;
+            Foreground = DarkForegroundBrush;
+            DownloadProgressBar.Background = DarkBackgroundBrush;
+            ChineseCheckbox.Foreground = DarkForegroundBrush;
+            EnglishCheckbox.Foreground = DarkForegroundBrush;
+        }
+        catch
+        {
+            // If dark mode application fails, just continue with default colors
+        }
     }
 
     private static bool IsSystemInDarkMode()
@@ -88,4 +106,72 @@ public partial class MainWindow : Window
             return false;
         }
     }
+
+    // Enable dark title bar (non-client area) for Windows 10 1809+ when dark mode is active.
+    // Returns true if dark title bar was successfully applied, false otherwise.
+    private bool TrySetDarkTitleBar()
+    {
+        try
+        {
+            var handle = new WindowInteropHelper(this).Handle;
+            if (handle == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            // Get real Windows build from registry (Environment.OSVersion.Build may return compatibility version)
+            int build = GetWindowsBuild();
+            if (build == -1)
+            {
+                return false;
+            }
+
+            // Detect Windows build: 17763 (1809) supports attribute 19, 18362+ (1903) supports 20
+            var attribute = build >= 18362 ? DWMWA_USE_IMMERSIVE_DARK_MODE : (build >= 17763 ? DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_1903 : -1);
+            if (attribute == -1)
+            {
+                return false;
+            }
+
+            int useDark = 1;
+            int result = DwmSetWindowAttribute(handle, attribute, ref useDark, sizeof(int));
+
+            // S_OK = 0, anything else is failure
+            return result == 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private static int GetWindowsBuild()
+    {
+        try
+        {
+            using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+            if (key is null)
+            {
+                return -1;
+            }
+
+            var buildValue = key.GetValue("CurrentBuildNumber");
+            if (buildValue is string buildStr && int.TryParse(buildStr, out int build))
+            {
+                return build;
+            }
+
+            return -1;
+        }
+        catch
+        {
+            return -1;
+        }
+    }
+
+    private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+    private const int DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_1903 = 19;
+
+    [DllImport("dwmapi.dll")]
+    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int dwAttribute, ref int pvAttribute, int cbAttribute);
 }
