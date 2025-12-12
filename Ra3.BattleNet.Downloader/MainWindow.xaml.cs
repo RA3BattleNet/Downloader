@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Security;
 using System.Windows;
@@ -30,6 +31,7 @@ public partial class MainWindow : Window
     }
 
     private void ChineseCheckbox_Checked(object sender, RoutedEventArgs e) => ChangeLanguage(chinese: true);
+
     private void EnglishCheckbox_Checked(object sender, RoutedEventArgs e) => ChangeLanguage(chinese: false);
 
     private void ChangeLanguage(bool chinese)
