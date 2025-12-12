@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.IO;
 using System.Security;
 using System.Windows;
 using System.Windows.Media;
@@ -66,9 +65,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex) when (ex is SecurityException
                                    or UnauthorizedAccessException
-                                   or ArgumentException
-                                   or ObjectDisposedException
-                                   or IOException)
+                                   or ArgumentException)
         {
             Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
             return false;
