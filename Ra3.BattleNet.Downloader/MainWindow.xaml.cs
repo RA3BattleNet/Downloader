@@ -13,6 +13,7 @@ namespace Ra3.BattleNet.Downloader;
 public partial class MainWindow : Window
 {
     private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+    private const int DarkModeRegistryValue = 0;
     private static readonly Brush DarkBackgroundBrush = Brushes.Black;
     private static readonly Brush DarkForegroundBrush = Brushes.White;
 
@@ -69,7 +70,7 @@ public partial class MainWindow : Window
             }
 
             var appsUseLightTheme = personalize.GetValue("AppsUseLightTheme");
-            return appsUseLightTheme is int value && value == 0;
+            return appsUseLightTheme is int value && value == DarkModeRegistryValue;
         }
         catch (Exception ex) when (ex is SecurityException
                                    or UnauthorizedAccessException
@@ -77,7 +78,7 @@ public partial class MainWindow : Window
                                    or ObjectDisposedException
                                    or IOException)
         {
-            Debug.WriteLine($"Failed to read dark mode registry setting, falling back to light mode: {ex}");
+            Debug.WriteLine($"Failed to read dark mode registry setting from {PersonalizeRegistryKeyPath}, falling back to light mode: {ex}");
             return false;
         }
     }
