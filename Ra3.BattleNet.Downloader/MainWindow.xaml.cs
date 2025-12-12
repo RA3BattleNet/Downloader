@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Security;
 using System.Windows;
 using System.Windows.Media;
@@ -60,12 +61,19 @@ public partial class MainWindow : Window
         try
         {
             using var personalize = Registry.CurrentUser.OpenSubKey(PersonalizeRegistryKeyPath);
-            var appsUseLightTheme = personalize?.GetValue("AppsUseLightTheme");
+            if (personalize is null)
+            {
+                return false;
+            }
+
+            var appsUseLightTheme = personalize.GetValue("AppsUseLightTheme");
             return appsUseLightTheme is int value && value == 0;
         }
         catch (Exception ex) when (ex is SecurityException
                                    or UnauthorizedAccessException
-                                   or ArgumentException)
+                                   or ArgumentException
+                                   or ObjectDisposedException
+                                   or IOException)
         {
             Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
             return false;
