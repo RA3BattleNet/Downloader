@@ -52,7 +52,10 @@ public partial class MainWindow : Window
 
         Background = Brushes.Black;
         Foreground = Brushes.White;
-        DownloadProgressBar.Background = Brushes.Black;
+        if (DownloadProgressBar != null)
+        {
+            DownloadProgressBar.Background = Brushes.Black;
+        }
     }
 
     private static bool IsSystemInDarkMode()
@@ -63,17 +66,7 @@ public partial class MainWindow : Window
             var appsUseLightTheme = personalize?.GetValue("AppsUseLightTheme");
             return appsUseLightTheme is int value && value == 0;
         }
-        catch (SecurityException ex)
-        {
-            Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
-            return false;
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
-            return false;
-        }
-        catch (ArgumentException ex)
+        catch (Exception ex) when (ex is SecurityException || ex is UnauthorizedAccessException || ex is ArgumentException)
         {
             Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
             return false;
