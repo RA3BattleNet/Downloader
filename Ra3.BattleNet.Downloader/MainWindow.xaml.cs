@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Security;
 using System.Windows;
 using System.Windows.Media;
@@ -52,10 +53,7 @@ public partial class MainWindow : Window
 
         Background = Brushes.Black;
         Foreground = Brushes.White;
-        if (DownloadProgressBar != null)
-        {
-            DownloadProgressBar.Background = Brushes.Black;
-        }
+        DownloadProgressBar.Background = Brushes.Black;
     }
 
     private static bool IsSystemInDarkMode()
@@ -66,7 +64,11 @@ public partial class MainWindow : Window
             var appsUseLightTheme = personalize?.GetValue("AppsUseLightTheme");
             return appsUseLightTheme is int value && value == 0;
         }
-        catch (Exception ex) when (ex is SecurityException || ex is UnauthorizedAccessException || ex is ArgumentException)
+        catch (Exception ex) when (ex is SecurityException
+                                   or UnauthorizedAccessException
+                                   or ArgumentException
+                                   or ObjectDisposedException
+                                   or IOException)
         {
             Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
             return false;
