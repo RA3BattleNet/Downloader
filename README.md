@@ -4,7 +4,7 @@
 
 ## 开发环境
 - Windows（WPF 应用）
-- .NET SDK，支持构建 .NET Framework 4.6.1 目标
+- .NET SDK，并安装 .NET Framework 4.6.1 Developer Pack 以提供目标框架
 
 ## 构建
 ```bash
