@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
 
@@ -39,6 +40,8 @@ public partial class MainWindow : Window
         Download.OpenAndLocateFile(Download.DownloadPath);
     }
 
+    private const string PersonalizeRegistryKeyPath = @"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+
     private void ApplySystemTheme()
     {
         if (!IsSystemInDarkMode())
@@ -49,19 +52,19 @@ public partial class MainWindow : Window
         Background = Brushes.Black;
         Foreground = Brushes.White;
         DownloadProgressBar.Background = Brushes.Black;
-        DownloadProgressBar.Foreground = Brushes.White;
     }
 
     private static bool IsSystemInDarkMode()
     {
         try
         {
-            using var personalize = Registry.CurrentUser.OpenSubKey(@"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize");
+            using var personalize = Registry.CurrentUser.OpenSubKey(PersonalizeRegistryKeyPath);
             var appsUseLightTheme = personalize?.GetValue("AppsUseLightTheme");
             return appsUseLightTheme is int value && value == 0;
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             return false;
         }
     }
