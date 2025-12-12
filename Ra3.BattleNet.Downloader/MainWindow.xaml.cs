@@ -13,7 +13,7 @@ namespace Ra3.BattleNet.Downloader;
 public partial class MainWindow : Window
 {
     private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-    private const int DarkModeRegistryValue = 0; // 0 means AppsUseLightTheme is false (dark mode enabled)
+    private const int DarkModeRegistryValue = 0; // 0 indicates dark mode is enabled (AppsUseLightTheme registry value is 0)
     private static readonly Brush DarkBackgroundBrush = Brushes.Black;
     private static readonly Brush DarkForegroundBrush = Brushes.White;
 
@@ -78,7 +78,9 @@ public partial class MainWindow : Window
                                    or ObjectDisposedException
                                    or IOException)
         {
+#if DEBUG
             Debug.WriteLine($"Failed to read dark mode registry setting from {PersonalizeRegistryKeyPath}, falling back to light mode: {ex}");
+#endif
             return false;
         }
     }
