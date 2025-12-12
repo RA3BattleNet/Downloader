@@ -13,6 +13,8 @@ namespace Ra3.BattleNet.Downloader;
 public partial class MainWindow : Window
 {
     private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+    private static readonly Brush DarkBackgroundBrush = Brushes.Black;
+    private static readonly Brush DarkForegroundBrush = Brushes.White;
 
     public MainWindow()
     {
@@ -51,9 +53,9 @@ public partial class MainWindow : Window
             return;
         }
 
-        Background = Brushes.Black;
-        Foreground = Brushes.White;
-        DownloadProgressBar.Background = Brushes.Black;
+        Background = DarkBackgroundBrush;
+        Foreground = DarkForegroundBrush;
+        DownloadProgressBar.Background = DarkBackgroundBrush;
     }
 
     private static bool IsSystemInDarkMode()
@@ -75,7 +77,7 @@ public partial class MainWindow : Window
                                    or ObjectDisposedException
                                    or IOException)
         {
-            Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
+            Debug.WriteLine($"Failed to read dark mode registry setting, falling back to light mode: {ex}");
             return false;
         }
     }
