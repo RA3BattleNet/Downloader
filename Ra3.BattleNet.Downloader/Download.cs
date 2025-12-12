@@ -38,11 +38,12 @@ public static class Download
 
         var settingsBuilder = new EngineSettingsBuilder
         {
-            ListenPort = -1,
-            DhtPort = -1,
+            AllowLocalPeerDiscovery = false,
             AllowPortForwarding = false,
             CacheDirectory = cacheFolder,
+            DhtEndPoint = null,
         };
+        settingsBuilder.ListenEndPoints.Clear();
         var engine = new ClientEngine(settingsBuilder.ToSettings());
 
         var taskSource = new TaskCompletionSource<string>();
@@ -59,10 +60,11 @@ public static class Download
             if (!torrentManager.Complete)
             {
                 var monitor = torrentManager.Monitor;
-                viewModel.SetDownloadedSize(monitor.DataBytesDownloaded, torrent.Size);
-                var progress = (double)monitor.DataBytesDownloaded / torrent.Size;
+                var dataBytesReceived = monitor.DataBytesReceived;
+                viewModel.SetDownloadedSize(dataBytesReceived, torrent.Size);
+                var progress = (double)dataBytesReceived / torrent.Size;
                 viewModel.SetProgress(progress);
-                viewModel.SetDownloadSpeed(monitor.DownloadSpeed);
+                viewModel.SetDownloadSpeed(monitor.DownloadRate);
                 return;
             }
 
