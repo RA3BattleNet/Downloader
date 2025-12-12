@@ -15,4 +15,4 @@ dotnet build Downloader.sln
 构建产物位于 `Ra3.BattleNet.Downloader/bin/{Debug|Release}`。
 
 ## 许可
-本项目基于 [MIT License](LICENSE) 发布。***
+本项目基于 [MIT License](LICENSE) 发布。
