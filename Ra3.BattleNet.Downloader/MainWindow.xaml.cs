@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
@@ -10,6 +11,8 @@ namespace Ra3.BattleNet.Downloader;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+
     public MainWindow()
     {
         InitializeComponent();
@@ -40,8 +43,6 @@ public partial class MainWindow : Window
         Download.OpenAndLocateFile(Download.DownloadPath);
     }
 
-    private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-
     private void ApplySystemTheme()
     {
         if (!IsSystemInDarkMode())
@@ -62,7 +63,17 @@ public partial class MainWindow : Window
             var appsUseLightTheme = personalize?.GetValue("AppsUseLightTheme");
             return appsUseLightTheme is int value && value == 0;
         }
-        catch (Exception ex)
+        catch (SecurityException ex)
+        {
+            Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
+            return false;
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
+            return false;
+        }
+        catch (ArgumentException ex)
         {
             Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
             return false;
