@@ -15,7 +15,7 @@ public partial class MainWindow : Window
 {
     private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
     private const int DarkModeRegistryValue = 0; // 0 indicates dark mode is enabled (AppsUseLightTheme registry value is 0)
-    private static readonly Brush DarkBackgroundBrush = Brushes.Black;
+    private static readonly Brush DarkBackgroundBrush = new SolidColorBrush(Color.FromRgb(0x19, 0x19, 0x19));
     private static readonly Brush DarkForegroundBrush = Brushes.White;
 
     public MainWindow()
@@ -59,6 +59,8 @@ public partial class MainWindow : Window
         Background = DarkBackgroundBrush;
         Foreground = DarkForegroundBrush;
         DownloadProgressBar.Background = DarkBackgroundBrush;
+        ChineseCheckbox.Foreground = DarkForegroundBrush;
+        EnglishCheckbox.Foreground = DarkForegroundBrush;
     }
 
     private static bool IsSystemInDarkMode()
