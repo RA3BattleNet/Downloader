@@ -40,7 +40,7 @@ public partial class MainWindow : Window
         Download.OpenAndLocateFile(Download.DownloadPath);
     }
 
-    private const string PersonalizeRegistryKeyPath = @"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
     private void ApplySystemTheme()
     {
@@ -64,7 +64,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
+            Debug.WriteLine($"Failed to read dark mode registry setting: {ex}");
             return false;
         }
     }
