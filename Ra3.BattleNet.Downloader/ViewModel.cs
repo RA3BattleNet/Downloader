@@ -85,7 +85,7 @@ public class ViewModel : INotifyPropertyChanged
     private double _progress;
     public void SetProgress(double progress)
     {
-        _progress = progress;
+        _progress = Math.Min(progress, 1.0);
         OnSet(nameof(Progress));
         OnSet(nameof(ProgressBarValue));
         OnSet(nameof(ProgressTaskbarValue));
