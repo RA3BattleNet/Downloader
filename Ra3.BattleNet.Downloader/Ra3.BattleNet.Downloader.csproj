@@ -8,7 +8,7 @@
 	<FileVersion>1.5.5.2</FileVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>Ra3.BattleNet.Icon.64px.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\ra3battlenet.ico</ApplicationIcon>
 	<Authors>RA3BattleNet Developers</Authors>
 	<Company>RA3BattleNet Developers</Company>
 	<Copyright>Copyright © 2024 RA3BattleNet Developers</Copyright>
@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Ra3.BattleNet.Icon.64px.ico" />
+    <Resource Include="Assets\logo.png" />
+    <Resource Include="Assets\migration-page.png" />
+    <Resource Include="Assets\ra3battlenet.ico" />
   </ItemGroup>
 
   <ItemGroup>

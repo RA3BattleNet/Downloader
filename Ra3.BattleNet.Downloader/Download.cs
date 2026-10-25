@@ -52,7 +52,6 @@ public static class Download
         var torrentManager = await engine.AddAsync(torrent, DownloadFolder);
 
         await engine.StartAllAsync();
-        viewModel.SetDownloadText(torrent.Files[0].Path);
 
         var dispatcherTimer = new DispatcherTimer();
         dispatcherTimer.Tick += new EventHandler((o, e) =>

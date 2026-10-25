@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Security;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -16,9 +13,6 @@ namespace Ra3.BattleNet.Downloader;
 public partial class MainWindow : Window
 {
     private const string PersonalizeRegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-    private const int DarkModeRegistryValue = 0; // 0 indicates dark mode is enabled (AppsUseLightTheme registry value is 0)
-    private static readonly Brush DarkBackgroundBrush = new SolidColorBrush(Color.FromRgb(0x19, 0x19, 0x19));
-    private static readonly Brush DarkForegroundBrush = Brushes.White;
 
     public MainWindow()
     {
@@ -36,8 +30,12 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void StartButton_Click(object sender, RoutedEventArgs e)
     {
+        StartButton.Visibility = Visibility.Collapsed;
+        IdleBottomPanel.Visibility = Visibility.Collapsed;
+        DownloadPanel.Visibility = Visibility.Visible;
+
         await Download.BitTorrentDownload((ViewModel)DataContext);
     }
 
@@ -60,6 +58,7 @@ public partial class MainWindow : Window
         Download.OpenAndLocateFile(Download.DownloadPath);
     }
 
+    // 界面默认是浅色（XAML 里的颜色值），系统深色时换成深色那套。
     private void ApplySystemTheme()
     {
         if (!IsSystemInDarkMode())
@@ -67,18 +66,21 @@ public partial class MainWindow : Window
             return;
         }
 
-        try
-        {
-            Background = DarkBackgroundBrush;
-            Foreground = DarkForegroundBrush;
-            DownloadProgressBar.Background = DarkBackgroundBrush;
-            ChineseCheckbox.Foreground = DarkForegroundBrush;
-            EnglishCheckbox.Foreground = DarkForegroundBrush;
-        }
-        catch
-        {
-            // If dark mode application fails, just continue with default colors
-        }
+        SetBrush("DialogBgBrush", Color.FromRgb(0x0A, 0x0A, 0x0A));
+        SetBrush("DialogFgBrush", Color.FromRgb(0xFA, 0xFA, 0xFA));
+        SetBrush("DialogSecondaryFgBrush", Color.FromRgb(0xA3, 0xA3, 0xA3));
+        SetBrush("DialogTertiaryFgBrush", Color.FromRgb(0x73, 0x73, 0x73));
+        SetBrush("DialogLineBrush", Color.FromArgb(0x1A, 0xFF, 0xFF, 0xFF));
+        SetBrush("DialogPrimaryBrush", Color.FromRgb(0xE5, 0xE5, 0xE5));
+        SetBrush("DialogPrimaryHoverBrush", Color.FromRgb(0xD4, 0xD4, 0xD8));
+        SetBrush("DialogPrimaryPressedBrush", Color.FromRgb(0xBD, 0xBD, 0xBD));
+        SetBrush("DialogPrimaryFgBrush", Color.FromRgb(0x17, 0x17, 0x17));
+        SetBrush("DialogTrackBrush", Color.FromRgb(0x2A, 0x2A, 0x2A));
+    }
+
+    private void SetBrush(string key, Color color)
+    {
+        Resources[key] = new SolidColorBrush(color);
     }
 
     private static bool IsSystemInDarkMode()
@@ -91,18 +93,11 @@ public partial class MainWindow : Window
                 return false;
             }
 
-            var appsUseLightTheme = personalize.GetValue("AppsUseLightTheme");
-            return appsUseLightTheme is int value && value == DarkModeRegistryValue;
+            // AppsUseLightTheme 为 0 表示系统处于深色模式
+            return personalize.GetValue("AppsUseLightTheme") is int value && value == 0;
         }
-        catch (Exception ex) when (ex is SecurityException
-                                   or UnauthorizedAccessException
-                                   or ArgumentException
-                                   or ObjectDisposedException
-                                   or IOException)
+        catch
         {
-#if DEBUG
-            Debug.WriteLine($"Failed to read dark mode registry setting from {PersonalizeRegistryKeyPath}, falling back to light mode: {ex}");
-#endif
             return false;
         }
     }
