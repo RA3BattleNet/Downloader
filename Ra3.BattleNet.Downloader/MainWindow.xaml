@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     x:Class="Ra3.BattleNet.Downloader.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -216,7 +216,7 @@
                 CornerRadius="8">
                 <Image
                     x:Name="PreviewImage"
-                    Source="/Assets/migration-page.png"
+                    Source="/Assets/ad.png"
                     Stretch="Uniform" />
             </Border>
 

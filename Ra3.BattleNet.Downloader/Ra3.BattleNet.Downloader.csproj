@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\logo.png" />
-    <Resource Include="Assets\migration-page.png" />
+    <Resource Include="Assets\ad.png" />
     <Resource Include="Assets\ra3battlenet.ico" />
   </ItemGroup>
 
