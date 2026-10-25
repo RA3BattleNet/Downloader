@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -8,7 +8,7 @@
 	<FileVersion>1.5.5.2</FileVersion>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>Ra3.BattleNet.Icon.64px.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\ra3battlenet.ico</ApplicationIcon>
 	<Authors>RA3BattleNet Developers</Authors>
 	<Company>RA3BattleNet Developers</Company>
 	<Copyright>Copyright © 2024 RA3BattleNet Developers</Copyright>
@@ -16,15 +16,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Client.torrent" />
+    <None Remove="desktop.torrent" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Ra3.BattleNet.Icon.64px.ico" />
+    <Resource Include="Assets\logo.png" />
+    <Resource Include="Assets\ad.png" />
+    <Resource Include="Assets\ra3battlenet.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Client.torrent" />
+    <EmbeddedResource Include="desktop.torrent" />
   </ItemGroup>
 
   <ItemGroup>

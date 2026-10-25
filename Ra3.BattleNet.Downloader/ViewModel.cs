@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -11,23 +11,27 @@ public class ViewModel : INotifyPropertyChanged
     private readonly Dictionary<string, string> _values = new()
     {
         ["en.Caption"] = "RA3BattleNet Downloader",
-        ["zh.Caption"] = "红警3战网客户端 下载程序",
+        ["zh.Caption"] = "红色警戒3战网客户端 下载程序",
         ["en.ErrorCaption"] = "RA3BattleNet Download Error",
         ["zh.ErrorCaption"] = "红警3战网下载错误",
-        ["en.DownloadTextPart1"] = "Downloading {0} to ",
-        ["zh.DownloadTextPart1"] = "正在下载 {0} 到 ",
-        ["en.DownloadFolderText"] = "Downloads",
-        ["zh.DownloadFolderText"] = "下载",
-        ["en.FolderText"] = " folder",
-        ["zh.FolderText"] = " 文件夹",
+        ["en.Welcome"] = "Welcome",
+        ["zh.Welcome"] = "欢迎使用",
+        ["en.Headline"] = "RA3BattleNet Desktop",
+        ["zh.Headline"] = "红色警戒3战网客户端",
+        ["en.Description"] = "The new BattleNet desktop client is now a one-stop platform for downloading and updating mainstream mods and maps. It also brings 8-player matches, automatic desync recovery and more, for more varied and more stable gameplay.",
+        ["zh.Description"] = "战网全新客户端已成为玩家的一站式服务平台，支持各大主流模组与地图的下载与更新。同时也带来8人联机、不同步自动恢复等多项能力，让玩家有更多样，更稳定的游戏体验！",
+        ["en.DescriptionMore"] = "You can visit https://ra3battle.net or join QQ group 881583099 to learn more about RA3BattleNet.",
+        ["zh.DescriptionMore"] = "您可以访问 https://ra3battle.net 或者加入 QQ 群 881583099 以了解关于红警3战网的更多信息。",
+        ["en.Start"] = "Install",
+        ["zh.Start"] = "开始下载",
+        ["en.HintIdle"] = "*The installer runs automatically",
+        ["zh.HintIdle"] = "*下载完成后将自动安装",
+        ["en.OpenFolder"] = "Open download folder",
+        ["zh.OpenFolder"] = "打开下载文件夹",
         ["en.DownloadedSize"] = "{0} / {1}",
         ["zh.DownloadedSize"] = "{0} / {1}",
-        ["en.Progress"] = "{0:P2} Completed",
-        ["zh.Progress"] = "已完成 {0:P2}",
         ["en.DownloadSpeed"] = "{0}/s",
         ["zh.DownloadSpeed"] = "{0}/s",
-        ["en.Description"] = "After the download is completed, the installer will be executed automatically. You can visit https://ra3battle.net for more information.",
-        ["zh.Description"] = "下载完毕之后安装程序将自动执行。您可以访问 https://ra3battle.net 或者加入 QQ 群 881583099 以了解关于红警3战网的更多信息。",
         ["en.CannotRunInstaller"] = "Cannot run the installer.",
         ["zh.CannotRunInstaller"] = "无法执行安装程序。"
     };
@@ -39,7 +43,6 @@ public class ViewModel : INotifyPropertyChanged
     public ViewModel(string id)
     {
         ChangeLanguage(id);
-        SetDownloadText("METADATA");
         SetDownloadedSize(0, 0);
         SetProgress(0);
         SetDownloadSpeed(0);
@@ -57,16 +60,13 @@ public class ViewModel : INotifyPropertyChanged
     public string Caption => Get(nameof(Caption));
     public string ErrorCaption => Get(nameof(ErrorCaption));
     public string CannotRunInstaller => Get(nameof(CannotRunInstaller));
-    public string DownloadTextPart1 => string.Format(Get(nameof(DownloadTextPart1)), _fileName);
-    public string DownloadFolderText => Get(nameof(DownloadFolderText));
-    public string FolderText => Get(nameof(FolderText));
-
-    private string _fileName = "?";
-    public void SetDownloadText(string fileName)
-    {
-        _fileName = fileName;
-        OnSet(nameof(DownloadTextPart1));
-    }
+    public string Welcome => Get(nameof(Welcome));
+    public string Headline => Get(nameof(Headline));
+    public string Description => Get(nameof(Description));
+    public string DescriptionMore => Get(nameof(DescriptionMore));
+    public string Start => Get(nameof(Start));
+    public string HintIdle => Get(nameof(HintIdle));
+    public string OpenFolder => Get(nameof(OpenFolder));
 
     public string DownloadedSize => string.Format(Get(nameof(DownloadedSize)), FormatBytes(_downloadedSize), FormatBytes(_totalSize));
     private long _downloadedSize;
@@ -78,7 +78,6 @@ public class ViewModel : INotifyPropertyChanged
         OnSet(nameof(DownloadedSize));
     }
 
-    public string Progress => string.Format(Get(nameof(Progress)), _progress);
     public double ProgressBarValue => _progress * 100;
     public double ProgressTaskbarValue => _progress;
 
@@ -86,7 +85,6 @@ public class ViewModel : INotifyPropertyChanged
     public void SetProgress(double progress)
     {
         _progress = Math.Min(progress, 1.0);
-        OnSet(nameof(Progress));
         OnSet(nameof(ProgressBarValue));
         OnSet(nameof(ProgressTaskbarValue));
     }
@@ -98,8 +96,6 @@ public class ViewModel : INotifyPropertyChanged
         _bytePerSecond = bytePerSecond;
         OnSet(nameof(DownloadSpeed));
     }
-
-    public string Description => Get(nameof(Description));
 
     private string Get(string property)
     {

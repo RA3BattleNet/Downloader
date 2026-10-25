@@ -1,4 +1,4 @@
-﻿using MonoTorrent;
+using MonoTorrent;
 using MonoTorrent.Client;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ public static class Download
             }
         }
 
-        var torrent = await Task.Run(() => Torrent.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Download).Namespace + ".Client.torrent")));
+        var torrent = await Task.Run(() => Torrent.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Download).Namespace + ".desktop.torrent")));
 
         var settingsBuilder = new EngineSettingsBuilder
         {
@@ -52,7 +52,6 @@ public static class Download
         var torrentManager = await engine.AddAsync(torrent, DownloadFolder);
 
         await engine.StartAllAsync();
-        viewModel.SetDownloadText(torrent.Files[0].Path);
 
         var dispatcherTimer = new DispatcherTimer();
         dispatcherTimer.Tick += new EventHandler((o, e) =>

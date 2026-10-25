@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     x:Class="Ra3.BattleNet.Downloader.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,9 +6,11 @@
     xmlns:local="clr-namespace:Ra3.BattleNet.Downloader"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="{Binding Caption}"
-    Width="460"
-    Height="240"
-    Loaded="Window_Loaded"
+    Width="653"
+    Background="{DynamicResource DialogBgBrush}"
+    FontFamily="Microsoft YaHei UI, Segoe UI"
+    Foreground="{DynamicResource DialogFgBrush}"
+    Icon="/Assets/ra3battlenet.ico"
     ResizeMode="CanMinimize"
     SizeToContent="Height"
     Topmost="True"
@@ -20,53 +22,289 @@
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="Normal" ProgressValue="{Binding ProgressTaskbarValue, Mode=OneWay}" />
     </Window.TaskbarItemInfo>
-    <StackPanel Margin="24,12,24,24">
-        <TextBlock Text="" TextWrapping="WrapWithOverflow">
-            <Run Text="{Binding DownloadTextPart1, Mode=OneWay}" />
-            <Hyperlink Click="Hyperlink_Click">
-              <Run Text="{Binding DownloadFolderText, Mode=OneWay}" />
-            </Hyperlink>
-            <Run Text="{Binding FolderText, Mode=OneWay}" />
-        </TextBlock>
-        <Grid Margin="0,2,0,10">
-            <TextBlock
-                HorizontalAlignment="Left"
-                FontSize="16"
-                Text="{Binding Progress}" />
+    <Window.Resources>
+        <!-- 浅色模式是默认值；系统深色时由代码换成下面这套深色值 -->
+        <SolidColorBrush x:Key="DialogBgBrush" Color="#F4F4F5" />
+        <SolidColorBrush x:Key="DialogFgBrush" Color="#18181B" />
+        <SolidColorBrush x:Key="DialogSecondaryFgBrush" Color="#52525B" />
+        <SolidColorBrush x:Key="DialogTertiaryFgBrush" Color="#8B8B94" />
+        <SolidColorBrush x:Key="DialogLineBrush" Color="#E4E4E7" />
+        <SolidColorBrush x:Key="DialogPrimaryBrush" Color="#18181B" />
+        <SolidColorBrush x:Key="DialogPrimaryHoverBrush" Color="#27272A" />
+        <SolidColorBrush x:Key="DialogPrimaryPressedBrush" Color="#3F3F46" />
+        <SolidColorBrush x:Key="DialogPrimaryFgBrush" Color="#FAFAFA" />
+        <SolidColorBrush x:Key="DialogTrackBrush" Color="#E4E4E7" />
+
+        <Style x:Key="DialogWelcomeTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="LineHeight" Value="22" />
+            <Setter Property="Foreground" Value="{DynamicResource DialogSecondaryFgBrush}" />
+        </Style>
+        <Style x:Key="DialogHeadlineTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="LineHeight" Value="32" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource DialogFgBrush}" />
+        </Style>
+        <Style x:Key="DialogDescriptionTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="LineHeight" Value="20" />
+            <Setter Property="MaxWidth" Value="283" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource DialogSecondaryFgBrush}" />
+        </Style>
+        <Style x:Key="DialogHintTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="LineHeight" Value="18" />
+            <Setter Property="MaxWidth" Value="283" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource DialogTertiaryFgBrush}" />
+        </Style>
+        <Style x:Key="DialogHintLinkStyle" TargetType="Hyperlink">
+            <Setter Property="Foreground" Value="{DynamicResource DialogSecondaryFgBrush}" />
+            <Setter Property="TextDecorations" Value="Underline" />
+        </Style>
+
+        <Style x:Key="DialogPrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MinWidth" Value="88" />
+            <Setter Property="Padding" Value="16,0" />
+            <Setter Property="Background" Value="{DynamicResource DialogPrimaryBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource DialogPrimaryFgBrush}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            x:Name="Chrome"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="Transparent"
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            SnapsToDevicePixels="True">
+                            <ContentPresenter
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource DialogPrimaryHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="{DynamicResource DialogPrimaryPressedBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Chrome" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LanguageToggleStyle" TargetType="RadioButton">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource DialogTertiaryFgBrush}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <TextBlock
+                            x:Name="Label"
+                            Text="{TemplateBinding Content}"
+                            FontSize="{TemplateBinding FontSize}"
+                            Foreground="{TemplateBinding Foreground}" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Label" Property="Foreground" Value="{DynamicResource DialogSecondaryFgBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Label" Property="Foreground" Value="{DynamicResource DialogFgBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DownloadProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="Height" Value="6" />
+            <Setter Property="Background" Value="{DynamicResource DialogTrackBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource DialogPrimaryBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="True">
+                            <Grid>
+                                <Rectangle x:Name="PART_Track" />
+                                <Rectangle
+                                    x:Name="PART_Indicator"
+                                    HorizontalAlignment="Left"
+                                    Fill="{TemplateBinding Foreground}"
+                                    RadiusX="3"
+                                    RadiusY="3" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Border Background="{DynamicResource DialogBgBrush}" ClipToBounds="True">
+        <Grid MinHeight="357" Margin="44,14,0,22">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="35" />
+                <ColumnDefinition Width="282" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- 左栏：logo 与文案整体下移，顶部和右侧配图齐平 -->
             <StackPanel
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Orientation="Horizontal">
-                <TextBlock Text="{Binding DownloadSpeed}" />
-                <TextBlock Margin="5,0,5,0" Text="-" />
-                <TextBlock Text="{Binding DownloadedSize}" />
+                Grid.Row="1"
+                Grid.Column="0">
+                <Image
+                    x:Name="LogoImage"
+                    Width="60"
+                    Height="60"
+                    HorizontalAlignment="Left"
+                    Source="/Assets/logo.png"
+                    Stretch="Uniform" />
+                <TextBlock
+                    Margin="0,15,0,0"
+                    Style="{StaticResource DialogWelcomeTextStyle}"
+                    Text="{Binding Welcome}" />
+                <TextBlock
+                    Margin="0,1,0,0"
+                    Style="{StaticResource DialogHeadlineTextStyle}"
+                    Text="{Binding Headline}" />
+                <TextBlock
+                    Margin="0,14,0,0"
+                    Style="{StaticResource DialogDescriptionTextStyle}"
+                    Text="{Binding Description}" />
+                <TextBlock
+                    Margin="0,6,0,0"
+                    Style="{StaticResource DialogDescriptionTextStyle}"
+                    Text="{Binding DescriptionMore}" />
             </StackPanel>
+
+            <!-- 配图按 480×320 给尺寸，与左栏同处第二行、顶部齐平；窗口右边缘把它裁掉 -->
+            <Border
+                x:Name="PreviewCard"
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="480"
+                Height="320"
+                Margin="0,0,0,12"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                BorderBrush="{DynamicResource DialogLineBrush}"
+                BorderThickness="1"
+                ClipToBounds="True"
+                CornerRadius="8">
+                <Image
+                    x:Name="PreviewImage"
+                    Source="/Assets/ad.png"
+                    Stretch="Uniform" />
+            </Border>
+
+            <!-- 语言切换放右上角，与第二行留出间距 -->
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="0,0,32,12"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <RadioButton
+                    x:Name="ChineseCheckbox"
+                    Checked="ChineseCheckbox_Checked"
+                    Content="中文"
+                    Style="{StaticResource LanguageToggleStyle}" />
+                <RadioButton
+                    x:Name="EnglishCheckbox"
+                    Margin="10,0,0,0"
+                    Checked="EnglishCheckbox_Checked"
+                    Content="English"
+                    Style="{StaticResource LanguageToggleStyle}" />
+            </StackPanel>
+
+            <!-- 底栏：待下载时左侧提示 + 下载文件夹入口、右侧开始按钮；下载中整条变成进度 -->
+            <Grid
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                MinHeight="36"
+                Margin="0,0,32,0"
+                VerticalAlignment="Center">
+                <StackPanel
+                    x:Name="IdleBottomPanel"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource DialogHintTextStyle}" Text="{Binding HintIdle}" />
+                    <TextBlock Margin="12,0,0,0">
+                        <Hyperlink Click="Hyperlink_Click" Style="{StaticResource DialogHintLinkStyle}">
+                            <Run Text="{Binding OpenFolder, Mode=OneWay}" />
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+
+                <Grid x:Name="DownloadPanel" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource DialogHintTextStyle}" Text="{Binding DownloadSpeed}" />
+                            <TextBlock
+                                Margin="4,0"
+                                Style="{StaticResource DialogHintTextStyle}"
+                                Text="·" />
+                            <TextBlock Style="{StaticResource DialogHintTextStyle}" Text="{Binding DownloadedSize}" />
+                        </StackPanel>
+                        <TextBlock
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            FontSize="13"
+                            Foreground="{DynamicResource DialogFgBrush}"
+                            Text="{Binding ProgressBarValue, StringFormat={}{0:F1}%}" />
+                    </Grid>
+                    <ProgressBar
+                        x:Name="DownloadProgressBar"
+                        Grid.Row="1"
+                        Margin="0,8,0,0"
+                        Maximum="100"
+                        Minimum="0"
+                        Style="{StaticResource DownloadProgressBarStyle}"
+                        Value="{Binding ProgressBarValue, Mode=OneWay}" />
+                </Grid>
+
+                <Button
+                    x:Name="StartButton"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Click="StartButton_Click"
+                    Content="{Binding Start}"
+                    Style="{StaticResource DialogPrimaryButtonStyle}" />
+            </Grid>
         </Grid>
-        <ProgressBar
-            x:Name="DownloadProgressBar"
-            Height="16"
-            Value="{Binding ProgressBarValue, Mode=OneWay}" />
-        <TextBlock
-            Margin="0,10,0,0"
-            Text="{Binding Description}"
-            TextWrapping="Wrap" />
-        <StackPanel
-            Margin="0,16,0,0"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type RadioButton}">
-                    <Setter Property="Margin" Value="8,0,0,0" />
-                </Style>
-            </StackPanel.Resources>
-            <RadioButton
-                x:Name="ChineseCheckbox"
-                Checked="ChineseCheckbox_Checked"
-                Content="中文" />
-            <RadioButton
-                x:Name="EnglishCheckbox"
-                Checked="EnglishCheckbox_Checked"
-                Content="English" />
-        </StackPanel>
-    </StackPanel>
+    </Border>
 </Window>
