@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Client.torrent" />
+    <None Remove="desktop.torrent" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Client.torrent" />
+    <EmbeddedResource Include="desktop.torrent" />
   </ItemGroup>
 
   <ItemGroup>
