@@ -160,7 +160,7 @@
         <Grid MinHeight="357" Margin="44,14,0,22">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="44" />
+                <ColumnDefinition Width="35" />
                 <ColumnDefinition Width="282" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -169,22 +169,21 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Image
-                x:Name="LogoImage"
-                Grid.Row="0"
-                Grid.Column="0"
-                Width="60"
-                Height="60"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Source="/Assets/logo.png"
-                Stretch="Uniform" />
-
+            <!-- 左栏：logo 与文案整体下移，顶部和右侧配图齐平 -->
             <StackPanel
                 Grid.Row="1"
-                Grid.Column="0"
-                Margin="0,15,0,0">
-                <TextBlock Style="{StaticResource DialogWelcomeTextStyle}" Text="{Binding Welcome}" />
+                Grid.Column="0">
+                <Image
+                    x:Name="LogoImage"
+                    Width="60"
+                    Height="60"
+                    HorizontalAlignment="Left"
+                    Source="/Assets/logo.png"
+                    Stretch="Uniform" />
+                <TextBlock
+                    Margin="0,15,0,0"
+                    Style="{StaticResource DialogWelcomeTextStyle}"
+                    Text="{Binding Welcome}" />
                 <TextBlock
                     Margin="0,1,0,0"
                     Style="{StaticResource DialogHeadlineTextStyle}"
@@ -199,15 +198,14 @@
                     Text="{Binding DescriptionMore}" />
             </StackPanel>
 
-            <!-- 配图按 420×280 给尺寸，窗口右边缘把它裁掉；与参考窗口一致 -->
+            <!-- 配图按 480×320 给尺寸，与左栏同处第二行、顶部齐平；窗口右边缘把它裁掉 -->
             <Border
                 x:Name="PreviewCard"
-                Grid.Row="0"
-                Grid.RowSpan="2"
+                Grid.Row="1"
                 Grid.Column="2"
                 Width="480"
                 Height="320"
-                Margin="0,24,0,12"
+                Margin="0,0,0,12"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 BorderBrush="{DynamicResource DialogLineBrush}"
@@ -220,11 +218,11 @@
                     Stretch="Uniform" />
             </Border>
 
-            <!-- 语言切换放右上角，贴着配图上方 -->
+            <!-- 语言切换放右上角，与第二行留出间距 -->
             <StackPanel
                 Grid.Row="0"
                 Grid.Column="2"
-                Margin="0,0,32,0"
+                Margin="0,0,32,12"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Orientation="Horizontal">

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -11,7 +11,7 @@ public class ViewModel : INotifyPropertyChanged
     private readonly Dictionary<string, string> _values = new()
     {
         ["en.Caption"] = "RA3BattleNet Downloader",
-        ["zh.Caption"] = "红警3战网客户端 下载程序",
+        ["zh.Caption"] = "红色警戒3战网客户端 下载程序",
         ["en.ErrorCaption"] = "RA3BattleNet Download Error",
         ["zh.ErrorCaption"] = "红警3战网下载错误",
         ["en.Welcome"] = "Welcome",
